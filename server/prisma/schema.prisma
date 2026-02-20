@@ -1,0 +1,111 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Book {
+  id          String   @id @default(uuid())
+  title       String
+  author      String
+  artist      String?
+  image       String?
+  cover       String?
+  price       String?
+  description String
+  ageRating   String   @map("age_rating")
+  pageCount   Int      @map("page_count")
+  isbn        String
+  releaseDate DateTime @map("release_date")
+
+  genres       Genre[]
+  series       Series?        @relation(fields: [seriesId], references: [id])
+  seriesId     String?
+  bookType     BookType       @relation(fields: [bookTypeId], references: [id])
+  bookTypeId   String
+  bookInBusket BookInBusket[]
+
+  createAt DateTime @default(now()) @map("create_at")
+  updateAt DateTime @updatedAt @map("update_at")
+}
+
+model BookType {
+  id    String @id @default(uuid())
+  title String
+  book  Book[]
+
+  createAt DateTime @default(now()) @map("create_at")
+  updateAt DateTime @updatedAt @map("update_at")
+}
+
+model Genre {
+  id    String @id @default(uuid())
+  title String
+
+  book Book[]
+
+  createAt DateTime @default(now()) @map("create_at")
+  updateAt DateTime @updatedAt @map("update_at")
+}
+
+model Series {
+  id    String @id @default(uuid())
+  title String
+
+  book          Book[]
+  relatedSeries Series[] @relation("SeriesRelations")
+  relatedTo     Series[] @relation("SeriesRelations")
+
+  createAt DateTime @default(now()) @map("create_at")
+  updateAt DateTime @updatedAt @map("update_at")
+}
+
+model User {
+  id       String    @id @default(ulid())
+  name     String
+  username String    @unique
+  image    String?
+  password String
+  session  Session[]
+  cartId   String
+  cart     Cart?
+
+  createAt DateTime @default(now()) @map("create_at")
+  updateAt DateTime @updatedAt @map("update_at")
+
+  @@map("user")
+}
+
+model Session {
+  id         String  @id
+  secretHash String
+  user       User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String?
+
+  createAt DateTime @default(now()) @map("create_at")
+  updateAt DateTime @updatedAt @map("update_at")
+}
+
+model Cart {
+  id           String         @id @default(uuid())
+  bookInBusket BookInBusket[]
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String         @unique
+  createAt     DateTime       @default(now()) @map("create_at")
+  updateAt     DateTime       @updatedAt @map("update_at")
+}
+
+model BookInBusket {
+  id     String @id @default(uuid())
+  count  Int    @default(1)
+  bookId String
+  book   Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  cart   Cart   @relation(fields: [cartId], references: [id])
+  cartId String
+}
