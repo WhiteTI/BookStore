@@ -4,13 +4,15 @@ interface ISession {
     id: string;
     secretHash: string;
     createdAt: Date;
+    lastVerifiedAt: Date;
 }
 
 interface ISessionWithToken extends ISession {
     token: string;
 }
 
-const SESSION_EXPIRES_IN_SECONDS = 60 * 60 * 24;
+const INACTIVITY_TIMEOUT_SECONDS = 60 * 60 * 24 * 10; // 10 дней
+const ACTIVITY_CHECK_INTERVAL_SECONDS = 60 * 60; // 1 час
 
 async function createSession(db: PrismaClient): Promise<ISessionWithToken> {
     const id = generateSecureRandomString()
@@ -30,11 +32,14 @@ async function createSession(db: PrismaClient): Promise<ISessionWithToken> {
         id,
         secretHash,
         token,
-        createdAt: newSession.createAt
+        createdAt: newSession.createAt,
+        lastVerifiedAt: newSession.updateAt,
     }
 }
 
 async function validateSession(db: PrismaClient, token: string): Promise<ISession | null> {
+    const now = new Date();
+
     const tokenParts = token.split('.')
     if (tokenParts.length !== 2)
         return null
@@ -53,6 +58,15 @@ async function validateSession(db: PrismaClient, token: string): Promise<ISessio
     if (!validSecret)
         return null
 
+    if (now.getTime() - session.lastVerifiedAt.getTime() >= ACTIVITY_CHECK_INTERVAL_SECONDS * 1000) {
+        await db.session.update({
+            where: {id: session.id},
+            data: {
+                secretHash: session.secretHash,
+            }
+        })
+    }
+
     return session
 }
 
@@ -64,7 +78,7 @@ async function getSession(db: PrismaClient, sessionId:  string): Promise<ISessio
     if (!session || !session.id)
         return null
 
-    if (now.getTime() - session.createAt.getTime() >= SESSION_EXPIRES_IN_SECONDS * 1000) {
+    if (now.getTime() - session.createAt.getTime() >= INACTIVITY_TIMEOUT_SECONDS * 1000) {
         await deleteSession(db, sessionId)
         return null
     }
@@ -72,7 +86,8 @@ async function getSession(db: PrismaClient, sessionId:  string): Promise<ISessio
     return {
         id: session.id,
         secretHash: session.secretHash,
-        createdAt: session.createAt
+        createdAt: session.createAt,
+        lastVerifiedAt: session.updateAt,
     }
 }
 
