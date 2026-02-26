@@ -1,4 +1,54 @@
-import type {PrismaClient} from '../../../prisma/generated/client'
+import type { PrismaClient } from '../../../prisma/generated/client'
+import { prisma } from '../../../libs/db'
+
+export abstract class AuthService {
+    static async login(email: string, password: string) {
+        const user = await prisma.user.findUnique({
+            where: {email}
+        })
+
+        if (!user)
+            return null
+
+        const isPassEquals = await Bun.password.verify(password, user.password)
+
+        if (!isPassEquals)
+            return null
+
+        const session = await createSession(prisma)
+
+        await prisma.user.update({
+            where: {id: user.id},
+            data: {
+                session: {
+                    connect: {
+                        id: session.id,
+                    }
+                }
+            }
+        })
+
+        return session
+    }
+
+    static async logout(token: string) {
+        const session = await validateSession(prisma, token)
+
+        if (!session)
+            return null
+
+        await prisma.session.delete({where: {id: session.id}})
+    }
+
+    static async refresh(token: string) {
+        const session = await validateSession(prisma, token)
+
+        if (!session)
+            return null
+
+        return session
+    }
+}
 
 interface ISession {
     id: string;
@@ -78,7 +128,7 @@ async function getSession(db: PrismaClient, sessionId:  string): Promise<ISessio
     if (!session || !session.id)
         return null
 
-    if (now.getTime() - session.createAt.getTime() >= INACTIVITY_TIMEOUT_SECONDS * 1000) {
+    if (now.getTime() - session.updateAt.getTime() >= INACTIVITY_TIMEOUT_SECONDS * 1000) {
         await deleteSession(db, sessionId)
         return null
     }
