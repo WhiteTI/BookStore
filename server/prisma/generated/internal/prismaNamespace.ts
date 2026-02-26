@@ -1094,7 +1094,7 @@ export type SeriesScalarFieldEnum = (typeof SeriesScalarFieldEnum)[keyof typeof 
 export const UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  username: 'username',
+  email: 'email',
   image: 'image',
   password: 'password',
   cartId: 'cartId',
