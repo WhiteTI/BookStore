@@ -28,7 +28,12 @@ export abstract class AuthService {
             }
         })
 
-        return session
+        return {
+            email: user.email,
+            name: user.name,
+            image: user.image,
+            token: session.token
+        }
     }
 
     static async logout(token: string) {
