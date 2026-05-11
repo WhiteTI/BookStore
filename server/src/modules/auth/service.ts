@@ -29,6 +29,7 @@ export abstract class AuthService {
         })
 
         return {
+            id: user.id,
             email: user.email,
             name: user.name,
             image: user.image,
@@ -42,16 +43,18 @@ export abstract class AuthService {
         if (!session)
             return null
 
-        await prisma.session.delete({where: {id: session.id}})
+        await deleteSession(prisma, session.id)
+
+        return true
     }
 
-    static async refresh(token: string) {
+    static async check(token: string) {
         const session = await validateSession(prisma, token)
 
         if (!session)
             return null
 
-        return session
+        return {session, token}
     }
 }
 
