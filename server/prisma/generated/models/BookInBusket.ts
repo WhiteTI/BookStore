@@ -185,7 +185,7 @@ export type BookInBusketGroupByOutputType = {
   _max: BookInBusketMaxAggregateOutputType | null
 }
 
-type GetBookInBusketGroupByPayload<T extends BookInBusketGroupByArgs> = Prisma.PrismaPromise<
+export type GetBookInBusketGroupByPayload<T extends BookInBusketGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<BookInBusketGroupByOutputType, T['by']> &
       {
@@ -1243,6 +1243,11 @@ export type BookInBusketFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Skip the first `n` BookInBuskets.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of BookInBuskets.
+   */
   distinct?: Prisma.BookInBusketScalarFieldEnum | Prisma.BookInBusketScalarFieldEnum[]
 }
 

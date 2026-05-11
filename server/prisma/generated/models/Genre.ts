@@ -151,7 +151,7 @@ export type GenreGroupByOutputType = {
   _max: GenreMaxAggregateOutputType | null
 }
 
-type GetGenreGroupByPayload<T extends GenreGroupByArgs> = Prisma.PrismaPromise<
+export type GetGenreGroupByPayload<T extends GenreGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<GenreGroupByOutputType, T['by']> &
       {
@@ -1107,6 +1107,11 @@ export type GenreFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Skip the first `n` Genres.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of Genres.
+   */
   distinct?: Prisma.GenreScalarFieldEnum | Prisma.GenreScalarFieldEnum[]
 }
 

@@ -171,7 +171,7 @@ export type UserGroupByOutputType = {
   email: string
   image: string | null
   password: string
-  cartId: string
+  cartId: string | null
   createAt: Date
   updateAt: Date
   _count: UserCountAggregateOutputType | null
@@ -179,7 +179,7 @@ export type UserGroupByOutputType = {
   _max: UserMaxAggregateOutputType | null
 }
 
-type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<
+export type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<UserGroupByOutputType, T['by']> &
       {
@@ -203,7 +203,7 @@ export type UserWhereInput = {
   email?: Prisma.StringFilter<"User"> | string
   image?: Prisma.StringNullableFilter<"User"> | string | null
   password?: Prisma.StringFilter<"User"> | string
-  cartId?: Prisma.StringFilter<"User"> | string
+  cartId?: Prisma.StringNullableFilter<"User"> | string | null
   createAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updateAt?: Prisma.DateTimeFilter<"User"> | Date | string
   session?: Prisma.SessionListRelationFilter
@@ -216,7 +216,7 @@ export type UserOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   password?: Prisma.SortOrder
-  cartId?: Prisma.SortOrder
+  cartId?: Prisma.SortOrderInput | Prisma.SortOrder
   createAt?: Prisma.SortOrder
   updateAt?: Prisma.SortOrder
   session?: Prisma.SessionOrderByRelationAggregateInput
@@ -232,7 +232,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"User"> | string
   image?: Prisma.StringNullableFilter<"User"> | string | null
   password?: Prisma.StringFilter<"User"> | string
-  cartId?: Prisma.StringFilter<"User"> | string
+  cartId?: Prisma.StringNullableFilter<"User"> | string | null
   createAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updateAt?: Prisma.DateTimeFilter<"User"> | Date | string
   session?: Prisma.SessionListRelationFilter
@@ -245,7 +245,7 @@ export type UserOrderByWithAggregationInput = {
   email?: Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   password?: Prisma.SortOrder
-  cartId?: Prisma.SortOrder
+  cartId?: Prisma.SortOrderInput | Prisma.SortOrder
   createAt?: Prisma.SortOrder
   updateAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -262,7 +262,7 @@ export type UserScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   image?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
-  cartId?: Prisma.StringWithAggregatesFilter<"User"> | string
+  cartId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updateAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -273,7 +273,7 @@ export type UserCreateInput = {
   email: string
   image?: string | null
   password: string
-  cartId: string
+  cartId?: string | null
   createAt?: Date | string
   updateAt?: Date | string
   session?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -286,7 +286,7 @@ export type UserUncheckedCreateInput = {
   email: string
   image?: string | null
   password: string
-  cartId: string
+  cartId?: string | null
   createAt?: Date | string
   updateAt?: Date | string
   session?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -299,7 +299,7 @@ export type UserUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  cartId?: Prisma.StringFieldUpdateOperationsInput | string
+  cartId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   session?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -312,7 +312,7 @@ export type UserUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  cartId?: Prisma.StringFieldUpdateOperationsInput | string
+  cartId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   session?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -325,7 +325,7 @@ export type UserCreateManyInput = {
   email: string
   image?: string | null
   password: string
-  cartId: string
+  cartId?: string | null
   createAt?: Date | string
   updateAt?: Date | string
 }
@@ -336,7 +336,7 @@ export type UserUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  cartId?: Prisma.StringFieldUpdateOperationsInput | string
+  cartId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -347,7 +347,7 @@ export type UserUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  cartId?: Prisma.StringFieldUpdateOperationsInput | string
+  cartId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -431,7 +431,7 @@ export type UserCreateWithoutSessionInput = {
   email: string
   image?: string | null
   password: string
-  cartId: string
+  cartId?: string | null
   createAt?: Date | string
   updateAt?: Date | string
   cart?: Prisma.CartCreateNestedOneWithoutUserInput
@@ -443,7 +443,7 @@ export type UserUncheckedCreateWithoutSessionInput = {
   email: string
   image?: string | null
   password: string
-  cartId: string
+  cartId?: string | null
   createAt?: Date | string
   updateAt?: Date | string
   cart?: Prisma.CartUncheckedCreateNestedOneWithoutUserInput
@@ -471,7 +471,7 @@ export type UserUpdateWithoutSessionInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  cartId?: Prisma.StringFieldUpdateOperationsInput | string
+  cartId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cart?: Prisma.CartUpdateOneWithoutUserNestedInput
@@ -483,7 +483,7 @@ export type UserUncheckedUpdateWithoutSessionInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  cartId?: Prisma.StringFieldUpdateOperationsInput | string
+  cartId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cart?: Prisma.CartUncheckedUpdateOneWithoutUserNestedInput
@@ -495,7 +495,7 @@ export type UserCreateWithoutCartInput = {
   email: string
   image?: string | null
   password: string
-  cartId: string
+  cartId?: string | null
   createAt?: Date | string
   updateAt?: Date | string
   session?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -507,7 +507,7 @@ export type UserUncheckedCreateWithoutCartInput = {
   email: string
   image?: string | null
   password: string
-  cartId: string
+  cartId?: string | null
   createAt?: Date | string
   updateAt?: Date | string
   session?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -535,7 +535,7 @@ export type UserUpdateWithoutCartInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  cartId?: Prisma.StringFieldUpdateOperationsInput | string
+  cartId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   session?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -547,7 +547,7 @@ export type UserUncheckedUpdateWithoutCartInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  cartId?: Prisma.StringFieldUpdateOperationsInput | string
+  cartId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   session?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -652,7 +652,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     email: string
     image: string | null
     password: string
-    cartId: string
+    cartId: string | null
     createAt: Date
     updateAt: Date
   }, ExtArgs["result"]["user"]>
@@ -1284,6 +1284,11 @@ export type UserFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    * Skip the first `n` Users.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of Users.
+   */
   distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
 }
 
